@@ -4,6 +4,8 @@ from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 
 import numpy as np
+import time
+import pickle
 
 import data_load
 reviews = data_load.load_data()
@@ -16,7 +18,7 @@ def tokenize():
     binstars = [0 if review['stars'] <= 3 else 1 for review in reviews]
     balanced_texts = []
     balanced_labels = []
-    limit = 2600000  # Change this to grow/shrink the dataset
+    limit = 200000  # Change this to grow/shrink the dataset
     neg_pos_counts = [0, 0]
     for i in range(len(texts)):
         polarity = binstars[i]
@@ -49,11 +51,16 @@ def tokenize():
     tokenizer.fit_on_texts(balanced_texts)
     sequences = tokenizer.texts_to_sequences(balanced_texts)
     data = pad_sequences(sequences, maxlen=300)
+    
+    with open("keras_tokenizer.pickle", "wb") as f:
+        pickle.dump(tokenizer, f)
 
     return balanced_labels, tokenizer, data
 
 #print(tokenize())
 
-
-
-
+if __name__ == '__main__':
+    start_time = time.time()
+    print("Tokensize start", flush=True)
+    tokenize()
+    print("Tokenize done.", flush=True)

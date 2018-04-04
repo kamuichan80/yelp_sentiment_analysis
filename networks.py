@@ -3,11 +3,11 @@ from keras.models import Sequential
 
 import numpy as np
 
-import modules
+from modules import tokenize
 
-import pickle
+import time
 
-balanced_labels, tokenizer, data = modules.tokenize() 
+balanced_labels, tokenizer, data = tokenize() 
 
 def prototype():
     model = Sequential()
@@ -18,11 +18,14 @@ def prototype():
     model.add(LSTM(128))
     model.add(Dense(1, activation='sigmoid'))
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-    
-    with open("keras_tokenizer.pickle", "wb") as f:
-        pickle.dump(tokenizer, f)
     model.save("yelp_sentiment_model.hdf5")
     
     return model
 
 #print(prototype())
+
+if __name__ == '__main__':
+    start_time = time.time()
+    print("Prototype make start", flush=True)
+    prototype()
+    print("Prototype make done", flush=True)

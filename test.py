@@ -1,6 +1,9 @@
 from keras.models import load_model
 from keras.preprocessing.sequence import pad_sequences
 import pickle
+import json
+import numpy as np
+import pandas as pd
 
 # load the tokenizer and the model
 with open("keras_tokenizer.pickle", "rb") as f:
@@ -17,4 +20,10 @@ data = pad_sequences(sequences, maxlen=300)
 
 # get predictions for each of your new texts
 predictions = model.predict(data)
-print(predictions)
+predictionsdf = pd.DataFrame(data=predictions)
+print(predictionsdf)
+
+#predictionsList = np.ndarray.tolist(predictions)
+#jsonPredictions = json.dumps(predictionsList)
+
+#print(jsonPredictions)
